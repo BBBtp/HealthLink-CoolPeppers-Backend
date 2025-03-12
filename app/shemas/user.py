@@ -2,12 +2,15 @@ from pydantic import BaseModel, EmailStr
 
 class UserBase(BaseModel):
     username: str
-    email: EmailStr
-    is_active: bool = True
-    is_admin: bool = False
+    email: str
+    is_active: bool
+    is_admin: bool
+
+    class Config:
+        from_attributes = True  # Это нужно для работы с SQLAlchemy объектами
 
 class UserCreate(UserBase):
-    password: str  # Открытый пароль для регистрации
+    password: str
 
 class UserLogin(BaseModel):
     username: str
@@ -21,7 +24,5 @@ class TokenRefresh(BaseModel):
     refresh_token: str
 
 class UserProfile(UserBase):
-    id: int
-
     class Config:
         from_attributes = True
