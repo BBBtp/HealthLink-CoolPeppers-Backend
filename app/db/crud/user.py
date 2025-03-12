@@ -1,11 +1,11 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from app.db.models.user import User
-from app.shemas.user import UserCreate
+from app.shemas.user import UserCreate, UserBase
 from app.core.hashing import get_password_hash, verify_password
 from fastapi import HTTPException
 
-async def create_user(db: AsyncSession, user: UserCreate) -> User:
+async def create_user(db: AsyncSession, user: UserCreate) -> UserBase:
     """
     Создает нового пользователя в базе данных.
 
@@ -30,10 +30,11 @@ async def create_user(db: AsyncSession, user: UserCreate) -> User:
         is_active=user.is_active,
         is_admin=user.is_admin
     )
-    db.add(db_user)  # Это работает асинхронно
-    await db.commit()  # Асинхронная версия commit
-    await db.refresh(db_user)  # Асинхронная версия refresh
-    return db_user
+    db.add(db_user)
+    await db.commit()
+    await db.refresh(db_user)
+
+    return UserBase.from_orm(db_user)
 
 async def authenticate_user(db: AsyncSession, username: str, password: str) -> User | None:
     """
