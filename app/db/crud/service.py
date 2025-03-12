@@ -1,10 +1,10 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
 from app.db.models.service import Service
 from fastapi import HTTPException
 
-
-def get_services(db: Session, skip: int = 0, limit: int = 100, search: str = "", clinic_id: int | None = None,
-                 doctor_id: int | None = None):
+async def get_services(db: AsyncSession, skip: int = 0, limit: int = 100, search: str = "",
+                       clinic_id: int | None = None, doctor_id: int | None = None):
     """
     Получение списка услуг с возможностью фильтрации и пагинации.
 
@@ -12,7 +12,7 @@ def get_services(db: Session, skip: int = 0, limit: int = 100, search: str = "",
     Также поддерживает пагинацию.
 
     Аргументы:
-    - db: Session — объект базы данных для выполнения запроса.
+    - db: AsyncSession — объект асинхронной сессии базы данных.
     - skip: int — количество записей для пропуска (по умолчанию 0).
     - limit: int — количество записей для возврата (по умолчанию 100).
     - search: str — строка для поиска по имени услуги.
@@ -25,7 +25,7 @@ def get_services(db: Session, skip: int = 0, limit: int = 100, search: str = "",
     Исключения:
     - HTTPException: 404 — если результаты не найдены (в зависимости от контекста).
     """
-    query = db.query(Service)
+    query = select(Service)
 
     if search:
         query = query.filter(Service.name.ilike(f"%{search}%"))
@@ -36,22 +36,22 @@ def get_services(db: Session, skip: int = 0, limit: int = 100, search: str = "",
     if doctor_id:
         query = query.filter(Service.doctor_id == doctor_id)
 
-    services = query.offset(skip).limit(limit).all()
+    result = await db.execute(query.offset(skip).limit(limit))  # Асинхронное выполнение запроса
+    services = result.scalars().all()  # Получение списка результатов
 
     if not services:
         raise HTTPException(status_code=404, detail="Услуги не найдены")
 
     return services
 
-
-def get_service(db: Session, service_id: int):
+async def get_service(db: AsyncSession, service_id: int):
     """
     Получение услуги по её уникальному идентификатору.
 
     Эта функция возвращает одну услугу по её уникальному идентификатору.
 
     Аргументы:
-    - db: Session — объект базы данных для выполнения запроса.
+    - db: AsyncSession — объект асинхронной сессии базы данных.
     - service_id: int — уникальный идентификатор услуги.
 
     Возвращает:
@@ -60,7 +60,9 @@ def get_service(db: Session, service_id: int):
     Исключения:
     - HTTPException: 404 — если услуга с таким идентификатором не найдена.
     """
-    service = db.query(Service).filter(Service.id == service_id).first()
+    query = select(Service).filter(Service.id == service_id)
+    result = await db.execute(query)  # Асинхронное выполнение запроса
+    service = result.scalars().first()  # Получение первого результата
 
     if not service:
         raise HTTPException(status_code=404, detail="Услуга не найдена")

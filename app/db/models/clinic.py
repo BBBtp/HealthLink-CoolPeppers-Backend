@@ -14,4 +14,5 @@ class Clinic(Base):
     logo_url = Column(String, nullable=True)
     rating = Column(Float, default=0.0)
 
-    favorites = relationship("User", secondary="user_favorites")
+    services = relationship("Service", back_populates="clinics")
+    doctors = relationship("Doctor", back_populates="clinics")

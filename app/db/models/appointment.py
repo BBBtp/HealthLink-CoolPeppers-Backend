@@ -24,4 +24,4 @@ class Appointment(Base):
     clinic = relationship('Clinic')
     doctor = relationship('Doctor')
     service = relationship('Service')
-    user = relationship('User', back_populates='appointments')
+    users = relationship('User', back_populates='appointments')
