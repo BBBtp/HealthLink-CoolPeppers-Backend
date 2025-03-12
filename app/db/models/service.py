@@ -15,5 +15,5 @@ class Service(Base):
     clinic_id = Column(Integer, ForeignKey('clinics.id'))
     doctor_id = Column(Integer, ForeignKey('doctors.id'))
 
-    clinic = relationship('Clinic', back_populates='services')
-    doctor = relationship('Doctor', back_populates='services')
+    clinics = relationship('Clinic', back_populates='services')
+    doctors = relationship('Doctor', back_populates='services')

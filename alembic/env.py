@@ -4,6 +4,7 @@ from alembic import context
 from sqlalchemy import engine_from_config, create_engine
 from sqlalchemy import pool
 
+from app.core.config import settings
 from app.db.models.appointment import Appointment
 from app.db.models.clinic import Clinic
 from app.db.models.service import Service
@@ -12,17 +13,29 @@ from app.db.models.doctor import Doctor
 from app.db.models.payment import Payment
 from app.db.session import Base
 
-DATABASE_URL = "postgresql://postgres:123@localhost:5432/healthlink"
-
-engine = create_engine(DATABASE_URL)
-
+# this is the Alembic Config object, which provides
+# access to the values within the .ini file in use.
 config = context.config
 
-
+# Interpret the config file for Python logging.
+# This line sets up loggers basically.
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
+# add your model's MetaData object here
+# for 'autogenerate' support
+# from myapp import mymodel
+# target_metadata = mymodel.Base.metadata
 target_metadata = Base.metadata
+print(f"Loaded metadata tables: {target_metadata.tables.keys()}")
+
+
+# other values from the config, defined by the needs of env.py,
+# can be acquired:
+# my_important_option = config.get_main_option("my_important_option")
+# ... etc.
+config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
+
 
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.
