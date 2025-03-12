@@ -34,7 +34,7 @@ print(f"Loaded metadata tables: {target_metadata.tables.keys()}")
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
-config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
+config.set_main_option("sqlalchemy.url", settings.DATABASE_URL_ALEMBIC)
 
 
 def run_migrations_offline() -> None:
