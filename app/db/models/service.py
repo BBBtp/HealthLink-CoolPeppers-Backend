@@ -10,8 +10,9 @@ class Service(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
     description = Column(Text, nullable=True)
-    price = Column(Float)
-    duration = Column(Integer)
+    price = Column(Float,nullable=True)
+    duration = Column(Integer,nullable=True)
+    logo_url = Column(String,nullable=True)
     clinic_id = Column(Integer, ForeignKey('clinics.id'))
     doctor_id = Column(Integer, ForeignKey('doctors.id'))
 

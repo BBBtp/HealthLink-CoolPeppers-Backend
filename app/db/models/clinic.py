@@ -11,6 +11,10 @@ class Clinic(Base):
     name = Column(String, index=True)
     address = Column(String)
     description = Column(Text, nullable=True)
+    work_time = Column(Text, nullable=True)
+    year_foundation = Column(Integer, nullable=True)
+    customers_count = Column(Integer, nullable=True)
+    reviews_count = Column(Integer, nullable=True)
     logo_url = Column(String, nullable=True)
     rating = Column(Float, default=0.0)
 

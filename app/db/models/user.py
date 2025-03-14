@@ -8,7 +8,12 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True)
     email = Column(String, unique=True, index=True)
-    password_hash = Column(String)  # Хэш пароля
+    password_hash = Column(String)
+    photo_url = Column(String,nullable=True)
+    age = Column(Integer, nullable=True)
+    first_name = Column(String, nullable=True)
+    last_name = Column(String, nullable=True)
+    blood_type = Column(String, nullable=True)
     is_active = Column(Boolean, default=True)
     is_admin = Column(Boolean, default=False)
 

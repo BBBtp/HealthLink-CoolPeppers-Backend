@@ -13,6 +13,9 @@ class Doctor(Base):
     specialization = Column(String)
     description = Column(Text, nullable=True)
     photo_url = Column(String, nullable=True)
+    experience = Column(Integer, nullable=True)
+    customer_count = Column(Integer, nullable=True)
+    reviews_count = Column(Integer, nullable=True)
     rating = Column(Float, default=0.0)
     clinic_id = Column(Integer, ForeignKey('clinics.id'))
 
