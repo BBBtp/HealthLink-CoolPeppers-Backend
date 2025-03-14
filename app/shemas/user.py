@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel, EmailStr
 
 class UserBase(BaseModel):
@@ -26,10 +28,11 @@ class TokenRefresh(BaseModel):
 class UserProfile(BaseModel):
     username: str
     email: str
-    first_name: str
-    last_name: str
-    age: int
-    blood_type: str
-    photo_url: str
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    age: Optional[int] = None
+    blood_type: Optional[str] = None
+    photo_url: Optional[str] = None
+
     class Config:
         from_attributes = True
