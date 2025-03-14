@@ -13,3 +13,5 @@ httpx
 asyncpg
 email-validator
 python-multipart
+urllib3
+cloudinary

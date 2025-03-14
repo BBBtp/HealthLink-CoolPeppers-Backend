@@ -23,6 +23,13 @@ class Token(BaseModel):
 class TokenRefresh(BaseModel):
     refresh_token: str
 
-class UserProfile(UserBase):
+class UserProfile(BaseModel):
+    username: str
+    email: str
+    first_name: str
+    last_name: str
+    age: int
+    blood_type: str
+    photo_url: str
     class Config:
         from_attributes = True
