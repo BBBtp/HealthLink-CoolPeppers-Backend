@@ -11,6 +11,7 @@ from app.db.models.service import Service
 from app.db.models.user import User
 from app.db.models.doctor import Doctor
 from app.db.models.payment import Payment
+from app.db.models.appointment_slot import AppointmentSlot
 from app.db.session import Base
 
 # this is the Alembic Config object, which provides

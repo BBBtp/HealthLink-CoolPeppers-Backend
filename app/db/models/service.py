@@ -35,6 +35,6 @@ class Service(Base):
 
     # Связь с врачами через ассоциативную таблицу
     doctors = relationship("Doctor", secondary=service_doctor_association, back_populates="services")
-
+    appointments = relationship('Appointment', back_populates='service')
     # Связь с клиниками через ассоциативную таблицу
     clinics = relationship("Clinic", secondary=clinic_service_association, back_populates="services")

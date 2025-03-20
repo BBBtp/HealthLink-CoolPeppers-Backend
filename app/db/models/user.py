@@ -17,7 +17,7 @@ class User(Base):
     is_active = Column(Boolean, default=True)
     is_admin = Column(Boolean, default=False)
 
-    appointments = relationship('Appointment', back_populates='users')
+    appointments = relationship('Appointment', back_populates='user')
 
     def __repr__(self):
         return f"<User(id={self.id}, username={self.username}, email={self.email})>"

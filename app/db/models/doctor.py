@@ -1,9 +1,7 @@
 from sqlalchemy import Column, Integer, String, Text, Float, ForeignKey
 from sqlalchemy.orm import relationship
-
 from app.db.models.service import service_doctor_association
 from app.db.session import Base
-
 
 class Doctor(Base):
     __tablename__ = 'doctors'
@@ -25,3 +23,6 @@ class Doctor(Base):
 
     # Связь с услугами через ассоциативную таблицу
     services = relationship("Service", secondary=service_doctor_association, back_populates="doctors")
+    appointments = relationship('Appointment', back_populates='doctor')
+    # Связь с доступными слотами для записи (один ко многим)
+    appointment_slots = relationship('AppointmentSlot', back_populates='doctor')

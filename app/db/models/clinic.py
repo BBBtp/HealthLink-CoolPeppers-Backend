@@ -21,6 +21,6 @@ class Clinic(Base):
 
     # Связь с услугами
     services = relationship("Service", secondary=clinic_service_association, back_populates="clinics")
-
+    appointments = relationship('Appointment', back_populates='clinic')
     # Связь с врачами (один ко многим)
     doctors = relationship("Doctor", back_populates="clinic")
