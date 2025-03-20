@@ -18,3 +18,4 @@ class AppointmentSlot(Base):
 
     # Связи с другими таблицами
     doctor = relationship('Doctor', back_populates='appointment_slots')
+    appointments = relationship('Appointment', back_populates='appointment_slot')
