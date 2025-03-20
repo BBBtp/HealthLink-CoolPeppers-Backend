@@ -4,8 +4,9 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime
 from app.db.session import get_db
-from app.db.models import AppointmentSlot
+
 from app.db.crud.appointment_slot import create_slot, create_slots_for_doctor
+from app.shemas.appointment_slot import AppointmentSlot
 
 router = APIRouter()
 
