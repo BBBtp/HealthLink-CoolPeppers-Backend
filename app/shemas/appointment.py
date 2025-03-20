@@ -11,7 +11,7 @@ class AppointmentBase(BaseModel):
     doctor_id: int
     service_id: int
 class AppointmentCreate(AppointmentBase):
-    pass
+    status: str
 
 class Appointment(AppointmentBase):
     id: int

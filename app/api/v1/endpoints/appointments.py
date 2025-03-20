@@ -1,10 +1,12 @@
 from datetime import datetime
 
+from alembic.util import status
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select, DateTime
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.security import get_current_user
 from app.db.models import User, AppointmentSlot
+from app.db.models.appointment import AppointmentStatus
 from app.db.models.appointment_slot import SlotStatus
 from app.db.session import get_db
 from app.shemas.appointment import Appointment, AppointmentCreate
@@ -39,10 +41,11 @@ async def create_appointment(
         clinic_id=clinic_id,
         doctor_id=doctor_id,
         service_id=service_id,
+        status=AppointmentStatus.pending.value
     )
     new_appointment = await crud.create_appointment(db=db, appointment=appointment_data, user_id=current_user.id, slot_id=slot.id)
 
-    slot.status = SlotStatus.booked
+    slot.status = SlotStatus.booked.value
     db.add(slot)
     await db.commit()
 
