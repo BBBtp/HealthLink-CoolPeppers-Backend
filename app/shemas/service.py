@@ -1,4 +1,6 @@
 from pydantic import BaseModel
+from typing_extensions import Optional
+
 
 class ServiceBase(BaseModel):
     name: str
@@ -12,6 +14,6 @@ class ServiceCreate(ServiceBase):
 
 class Service(ServiceBase):
     id: int
-
+    logo_url: Optional[str] = None
     class Config:
         from_attributes = True
