@@ -63,7 +63,7 @@ def generate_slots_for_doctor(doctor_id: int, start_time: datetime, end_time: da
     current_time = start_time
     slots = []
     while current_time < end_time:
-        slot = AppointmentSlot(doctor_id=doctor_id, slot_time=current_time)
+        slot = AppointmentSlot(doctor_id=doctor_id, slot_time=current_time,status=str(SlotStatus.available))
         slots.append(slot)
         current_time += timedelta(minutes=interval_minutes)
     return slots
