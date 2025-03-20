@@ -20,5 +20,5 @@ class Doctor(Base):
     clinic_id = Column(Integer, ForeignKey('clinics.id'))
 
     # Связь с клиникой
-    clinics = relationship('Clinic', back_populates='doctors')
-    services = relationship('Service', back_populates='doctors')
+    clinic = relationship('Clinic', back_populates='doctors')
+    services = relationship('Service', back_populates='doctor')
