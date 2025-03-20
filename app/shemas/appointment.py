@@ -3,6 +3,8 @@ from xmlrpc.client import DateTime
 from pydantic import BaseModel
 from datetime import date, time, datetime
 
+from app.db.models.appointment import AppointmentStatus
+
 
 class AppointmentBase(BaseModel):
     clinic_id: int
@@ -13,7 +15,7 @@ class AppointmentCreate(AppointmentBase):
 
 class Appointment(AppointmentBase):
     id: int
-    status: str
+    status: AppointmentStatus
 
     class Config:
         from_attributes = True
