@@ -14,9 +14,10 @@ async def get_doctors(
     limit: int = 100,
     search: str = "",
     clinic_id: int | None = None,
+    service_id: int | None = None,
     db: AsyncSession = Depends(get_db)
 ):
-    doctors = await crud.get_doctors(db=db, skip=skip, limit=limit, search=search, clinic_id=clinic_id)
+    doctors = await crud.get_doctors(db=db, skip=skip, limit=limit, search=search, clinic_id=clinic_id,service_id=service_id)
     return doctors
 
 @router.get("/{doctor_id}", response_model=Doctor)
