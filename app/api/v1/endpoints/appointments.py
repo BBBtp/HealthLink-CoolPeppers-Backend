@@ -26,7 +26,7 @@ async def create_appointment(
         select(AppointmentSlot).filter(
             AppointmentSlot.doctor_id == doctor_id,
             AppointmentSlot.slot_time == date_time,
-            AppointmentSlot.status == SlotStatus.available
+            AppointmentSlot.status == SlotStatus.available.value
         )
     )
     slot = slot.scalar_one_or_none()
