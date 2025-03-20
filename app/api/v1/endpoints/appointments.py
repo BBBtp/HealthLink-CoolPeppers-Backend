@@ -17,7 +17,7 @@ async def create_appointment(
     clinic_id: int,
     doctor_id: int,
     service_id: int,
-    date_time: datetime,
+    slot_id: int,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
@@ -25,7 +25,7 @@ async def create_appointment(
     slot = await db.execute(
         select(AppointmentSlot).filter(
             AppointmentSlot.doctor_id == doctor_id,
-            AppointmentSlot.slot_time == date_time,
+            AppointmentSlot.id == slot_id,
             AppointmentSlot.status == SlotStatus.available.value
         )
     )
@@ -39,7 +39,6 @@ async def create_appointment(
         clinic_id=clinic_id,
         doctor_id=doctor_id,
         service_id=service_id,
-        date_time=date_time,
     )
     new_appointment = await crud.create_appointment(db=db, appointment=appointment_data, user_id=current_user.id, slot_id=slot.id)
 

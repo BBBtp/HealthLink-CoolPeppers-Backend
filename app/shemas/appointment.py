@@ -8,7 +8,6 @@ class AppointmentBase(BaseModel):
     clinic_id: int
     doctor_id: int
     service_id: int
-    date_time: datetime
 class AppointmentCreate(AppointmentBase):
     pass
 
