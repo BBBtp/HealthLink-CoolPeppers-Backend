@@ -16,6 +16,10 @@ class Clinic(ClinicBase):
     rating: float
     metro: Optional[str] = None
     price: Optional[int] = None
+    work_time: Optional[str] = None
+    year_foundation: Optional[int] = None
+    customers_count: Optional[int] = None
+    reviews_count: Optional[int] = None
     class Config:
         orm_mode = True
 

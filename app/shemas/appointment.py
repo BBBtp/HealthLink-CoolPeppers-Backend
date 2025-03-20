@@ -16,6 +16,7 @@ class AppointmentCreate(AppointmentBase):
 class Appointment(AppointmentBase):
     id: int
     status: AppointmentStatus
+    appointment_slot_id: int
 
     class Config:
         from_attributes = True

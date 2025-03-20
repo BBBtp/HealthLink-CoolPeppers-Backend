@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel
 
 class DoctorBase(BaseModel):
@@ -13,7 +15,9 @@ class DoctorCreate(DoctorBase):
 class Doctor(DoctorBase):
     id: int
     description: str
-
+    experience: Optional[int] = None
+    customer_count: Optional[int] = None
+    reviews_count: Optional[int] = None
     class Config:
         from_attributes = True
 
