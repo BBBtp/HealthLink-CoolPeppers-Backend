@@ -4,7 +4,7 @@ class DoctorBase(BaseModel):
     first_name: str
     last_name: str
     specialization: str
-    photo_url: str
+    photo_url: str | None = None
     rating: float
 
 class DoctorCreate(DoctorBase):

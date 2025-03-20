@@ -1,13 +1,14 @@
+from xmlrpc.client import DateTime
+
 from pydantic import BaseModel
-from datetime import date, time
+from datetime import date, time, datetime
+
 
 class AppointmentBase(BaseModel):
     clinic_id: int
     doctor_id: int
     service_id: int
-    date: date
-    time: time
-
+    date_time: datetime
 class AppointmentCreate(AppointmentBase):
     pass
 

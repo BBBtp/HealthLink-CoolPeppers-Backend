@@ -1,5 +1,7 @@
+from datetime import datetime
+
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import select
+from sqlalchemy import select, DateTime
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.security import get_current_user
 from app.db.models import User, AppointmentSlot
@@ -12,15 +14,18 @@ router = APIRouter()
 
 @router.post("/", response_model=Appointment)
 async def create_appointment(
-    appointment_data: AppointmentCreate,
+    clinic_id: int,
+    doctor_id: int,
+    service_id: int,
+    date_time: datetime,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
     # Проверяем, доступен ли выбранный слот для врача
     slot = await db.execute(
         select(AppointmentSlot).filter(
-            AppointmentSlot.doctor_id == appointment_data.doctor_id,
-            AppointmentSlot.slot_time == appointment_data.date,
+            AppointmentSlot.doctor_id == doctor_id,
+            AppointmentSlot.slot_time == date_time,
             AppointmentSlot.status == SlotStatus.available
         )
     )
@@ -30,6 +35,12 @@ async def create_appointment(
         raise HTTPException(status_code=400, detail="Selected slot is not available")
 
     # Создание записи и обновление статуса слота на "booked"
+    appointment_data = AppointmentCreate(
+        clinic_id=clinic_id,
+        doctor_id=doctor_id,
+        service_id=service_id,
+        date_time=date_time,
+    )
     new_appointment = await crud.create_appointment(db=db, appointment=appointment_data, user_id=current_user.id, slot_id=slot.id)
 
     slot.status = SlotStatus.booked
@@ -37,6 +48,7 @@ async def create_appointment(
     await db.commit()
 
     return new_appointment
+
 
 @router.get("/", response_model=list[Appointment])
 async def get_user_appointments(
