@@ -2,9 +2,10 @@ from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from app.db.models.doctor import Doctor
+from app.db.models.service import service_doctor_association, Service
 
 
-async def get_doctors(db: AsyncSession, skip: int = 0, limit: int = 100, search: str = "", clinic_id: int | None = None):
+async def get_doctors(db: AsyncSession, skip: int = 0, limit: int = 100, search: str = "", clinic_id: int | None = None,service_id: int | None = None):
     """
     Получение списка врачей с возможностью фильтрации по имени, клинике и пагинации.
 
@@ -14,6 +15,7 @@ async def get_doctors(db: AsyncSession, skip: int = 0, limit: int = 100, search:
     - limit: int (по умолчанию 100) — максимальное количество записей для возвращения.
     - search: str (по умолчанию "") — строка для поиска по фамилии врача.
     - clinic_id: int | None (по умолчанию None) — уникальный идентификатор клиники для фильтрации по клинике.
+    - service_id: int | None (по умолчанию None) — уникальный идентификатор услуги для фильтрации по услуге.
 
     Возвращает:
     - Список объектов Doctor — врачи, соответствующие критериям поиска, фильтрации и пагинации.
@@ -26,6 +28,8 @@ async def get_doctors(db: AsyncSession, skip: int = 0, limit: int = 100, search:
     if clinic_id:
         query = query.filter(Doctor.clinic_id == clinic_id)
 
+    if service_id:
+        query = query.join(service_doctor_association).join(Service).filter(Service.id == service_id)
     result = await db.execute(query)
     doctors = result.scalars().all()
     return doctors

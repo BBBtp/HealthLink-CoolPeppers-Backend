@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from app.db.models.service import Service
+from app.db.models.service import Service, clinic_service_association
 from fastapi import HTTPException
 
 async def get_services(db: AsyncSession, skip: int = 0, limit: int = 100, search: str = "",
@@ -31,10 +31,7 @@ async def get_services(db: AsyncSession, skip: int = 0, limit: int = 100, search
         query = query.filter(Service.name.ilike(f"%{search}%"))
 
     if clinic_id:
-        query = query.filter(Service.clinic_id == clinic_id)
-
-    if doctor_id:
-        query = query.filter(Service.doctor_id == doctor_id)
+        query = query.join(clinic_service_association).filter(clinic_service_association.c.clinic_id == clinic_id)
 
     result = await db.execute(query.offset(skip).limit(limit))  # Асинхронное выполнение запроса
     services = result.scalars().all()  # Получение списка результатов

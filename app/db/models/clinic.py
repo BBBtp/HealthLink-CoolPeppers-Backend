@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, Text, Float
 from sqlalchemy.orm import relationship
 
+from app.db.models.service import clinic_service_association
 from app.db.session import Base
 
 
@@ -18,5 +19,8 @@ class Clinic(Base):
     logo_url = Column(String, nullable=True)
     rating = Column(Float, default=0.0)
 
-    clinic = relationship("Clinic", back_populates="doctors")
-    services = relationship("Service", secondary="service_doctor_association", back_populates="doctors")
+    # Связь с услугами
+    services = relationship("Service", secondary=clinic_service_association, back_populates="clinics")
+
+    # Связь с врачами (один ко многим)
+    doctors = relationship("Doctor", back_populates="clinic")

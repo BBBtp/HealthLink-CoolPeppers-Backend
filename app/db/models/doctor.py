@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, Text, Float, ForeignKey
 from sqlalchemy.orm import relationship
 
+from app.db.models.service import service_doctor_association
 from app.db.session import Base
 
 
@@ -17,8 +18,10 @@ class Doctor(Base):
     customer_count = Column(Integer, nullable=True)
     reviews_count = Column(Integer, nullable=True)
     rating = Column(Float, default=0.0)
-    clinic_id = Column(Integer, ForeignKey('clinics.id'))
 
-    # Связь с клиникой
-    clinic = relationship('Clinic', back_populates='doctors')
-    services = relationship('Service', back_populates='doctor')
+    # Связь с клиникой (один ко многим)
+    clinic_id = Column(Integer, ForeignKey('clinics.id'))
+    clinic = relationship("Clinic", back_populates="doctors")
+
+    # Связь с услугами через ассоциативную таблицу
+    services = relationship("Service", secondary=service_doctor_association, back_populates="doctors")
