@@ -19,6 +19,7 @@ class Clinic(Base):
     reviews_count = Column(Integer, nullable=True)
     logo_url = Column(String, nullable=True)
     rating = Column(Float, default=0.0)
+    price = Column(Integer, nullable=True)
 
     # Связь с услугами
     services = relationship("Service", secondary=clinic_service_association, back_populates="clinics")
