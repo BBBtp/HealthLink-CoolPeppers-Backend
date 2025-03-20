@@ -15,6 +15,7 @@ class Clinic(ClinicBase):
     description: str
     rating: float
     metro: Optional[str] = None
+    price: Optional[int] = None
     class Config:
         orm_mode = True
 
