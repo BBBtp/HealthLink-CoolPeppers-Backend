@@ -11,6 +11,7 @@ class Clinic(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
     address = Column(String)
+    metro = Column(String,nullable=True)
     description = Column(Text, nullable=True)
     work_time = Column(Text, nullable=True)
     year_foundation = Column(Integer, nullable=True)
