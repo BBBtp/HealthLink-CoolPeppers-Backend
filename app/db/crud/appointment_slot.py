@@ -97,3 +97,20 @@ async def create_slots_for_doctor(db: AsyncSession, doctor_id: int, start_time: 
     await db.commit()
 
     return slots
+
+
+async def get_slots_for_doctor(db: AsyncSession, doctor_id: int):
+    """
+       Список слотов выбранного врача
+
+       Аргументы:
+       - db: AsyncSession — объект базы данных для выполнения запроса.
+       - doctor_id: int — уникальный идентификатор врача.
+
+       Возвращает:
+       - Список добавленных слотов.
+       """
+    query = select(AppointmentSlot).filter(AppointmentSlot.doctor_id == doctor_id, AppointmentSlot.status == SlotStatus.available.value)
+    results = await db.execute(query)
+    slots = results.scalars().all()
+    return slots
