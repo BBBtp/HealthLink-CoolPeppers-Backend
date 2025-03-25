@@ -26,7 +26,7 @@ async def get_slots_ednpoint(
     return slots
 
 @router.get("/slots/{slot_id}",response_model=list[AppointmentSlot])
-async def get_slots_ednpoint(
+async def get_slots_id_endpoint(
         slot_id: int,
         db: AsyncSession = Depends(get_db)
 ):
