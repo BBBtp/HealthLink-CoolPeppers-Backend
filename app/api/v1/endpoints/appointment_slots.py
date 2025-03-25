@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime
 from app.db.session import get_db
 
-from app.db.crud.appointment_slot import create_slot, create_slots_for_doctor, get_slots_for_doctor
+from app.db.crud.appointment_slot import create_slot, create_slots_for_doctor, get_slots_for_doctor, get_slot_by_id
 from app.shemas.appointment_slot import AppointmentSlot
 
 router = APIRouter()
@@ -23,6 +23,21 @@ async def get_slots_ednpoint(
         - db: AsyncSession — объект базы данных.
         """
     slots = await get_slots_for_doctor(doctor_id = doctor_id, db=db)
+    return slots
+
+@router.get("/slots/{slot_id}",response_model=list[AppointmentSlot])
+async def get_slots_ednpoint(
+        slot_id: int,
+        db: AsyncSession = Depends(get_db)
+):
+    """
+        Эндпоинт для получения слота записи.
+
+        Аргументы:
+        - doctor_id: int — идентификатор врача.
+        - db: AsyncSession — объект базы данных.
+        """
+    slots = await get_slot_by_id(slot_id = slot_id, db=db)
     return slots
 
 @router.post("/slots", response_model=AppointmentSlot)

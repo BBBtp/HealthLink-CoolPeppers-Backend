@@ -13,3 +13,4 @@ class AppointmentSlot(AppointmentSlotBase):
 
     class Config:
         from_attributes = True
+
