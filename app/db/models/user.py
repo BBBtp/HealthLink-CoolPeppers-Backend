@@ -1,6 +1,11 @@
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, Integer, String, Boolean,Enum
 from sqlalchemy.orm import relationship
 from app.db.session import Base
+from enum import Enum as PyEnum
+
+class UserRole(PyEnum):
+    user = "user"
+    doctor = "doctor"
 
 class User(Base):
     __tablename__ = 'users'
@@ -16,6 +21,7 @@ class User(Base):
     blood_type = Column(String, nullable=True)
     is_active = Column(Boolean, default=True)
     is_admin = Column(Boolean, default=False)
+    role = Column(String, default=UserRole.user,nullable=True)
 
     appointments = relationship('Appointment', back_populates='user')
 
