@@ -16,7 +16,7 @@ class Message(Base):
     sender_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     text = Column(String, nullable=False)
     created_at = Column(DateTime, default=func.now())
-    status = Column(Enum(MessageStatus), default=MessageStatus.SENT)
+    status = Column(String, default=MessageStatus.SENT)
 
     chat = relationship("Chat", back_populates="messages")
     sender = relationship("User")
