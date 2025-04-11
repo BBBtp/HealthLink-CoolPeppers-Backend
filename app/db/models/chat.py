@@ -10,5 +10,6 @@ class Chat(Base):
     user2_id = Column(Integer, ForeignKey("users.id"), nullable=False)  # Второй участник
     created_at = Column(DateTime, default=func.now())
 
+    messages = relationship("Message", back_populates="chat")
     user1 = relationship("User", foreign_keys=[user1_id])
     user2 = relationship("User", foreign_keys=[user2_id])
