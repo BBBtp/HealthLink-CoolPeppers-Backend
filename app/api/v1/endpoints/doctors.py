@@ -33,7 +33,7 @@ async def add_doctor_to_favorites(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)  # Авторизация
 ):
-    await crud.add_to_favorites(db=db, user_id=current_user.id, doctor_id=doctor_id)
+    await crud.add_doctor_to_favorites(db=db, user_id=current_user.id, doctor_id=doctor_id)
     return {"message": "Doctor added to favorites"}
 
 @router.delete("/{doctor_id}/favorite", response_model=DoctorFavorite)
@@ -42,5 +42,5 @@ async def remove_doctor_from_favorites(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)  # Авторизация
 ):
-    await crud.remove_from_favorites(db=db, user_id=current_user.id, doctor_id=doctor_id)
+    await crud.remove_doctor_from_favorites(db=db, user_id=current_user.id, doctor_id=doctor_id)
     return {"message": "Doctor removed from favorites"}

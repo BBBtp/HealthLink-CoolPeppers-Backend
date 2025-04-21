@@ -8,4 +8,4 @@ from .payment import Payment
 from .appointment_slot import AppointmentSlot
 from .chat import Chat
 from .message import Message
-
+from .symptom import Symptom

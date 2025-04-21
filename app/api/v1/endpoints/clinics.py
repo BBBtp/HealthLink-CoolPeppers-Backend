@@ -26,7 +26,7 @@ async def get_clinic(clinic_id: int, db: AsyncSession = Depends(get_db)):
 @router.post("/{clinic_id}/favorite", response_model=ClinicFavorite)
 async def add_clinic_to_favorites(clinic_id: int, db: AsyncSession = Depends(get_db), user_id: int = Depends(get_current_user)):
     # Вызовем асинхронную функцию для добавления в избранное
-    await crud.add_to_favorites(db=db, user_id=user_id, clinic_id=clinic_id)  # Важно: вызов с await
+    await crud.add_clinic_to_favorites(db=db, user_id=user_id, clinic_id=clinic_id)  # Важно: вызов с await
     return {"message": "Clinic added to favorites"}
 
 
@@ -34,5 +34,5 @@ async def add_clinic_to_favorites(clinic_id: int, db: AsyncSession = Depends(get
 async def remove_clinic_from_favorites(clinic_id: int, db: AsyncSession = Depends(get_db),
                                         current_user: User = Depends(get_current_user)):
     # Вызовем асинхронную функцию для удаления из избранного
-    await crud.remove_from_favorites(db=db, user_id=current_user.id, clinic_id=clinic_id)  # Важно: вызов с await
+    await crud.remove_clinic_from_favorites(db=db, user_id=current_user.id, clinic_id=clinic_id)  # Важно: вызов с await
     return {"message": "Clinic removed from favorites"}

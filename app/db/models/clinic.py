@@ -26,3 +26,10 @@ class Clinic(Base):
     appointments = relationship('Appointment', back_populates='clinic')
     # Связь с врачами (один ко многим)
     doctors = relationship("Doctor", back_populates="clinic")
+    favorited_by = relationship(
+        "User",
+        secondary="user_favorites",
+        primaryjoin="and_(Clinic.id == user_favorites.c.item_id, "
+                    "user_favorites.c.item_type == 'clinic')",
+        viewonly=True
+    )

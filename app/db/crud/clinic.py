@@ -1,6 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+
+from app.db.crud.favorites import add_to_favorites, remove_from_favorites
 from app.db.models.clinic import Clinic
+from app.db.models.favorites import FavoriteType
 from app.shemas.clinic import ClinicCreate
 
 
@@ -58,7 +61,7 @@ async def create_clinic(db: AsyncSession, clinic: ClinicCreate):
     return db_clinic
 
 
-async def add_to_favorites(db: AsyncSession, user_id: int, clinic_id: int):
+async def add_clinic_to_favorites(db: AsyncSession, user_id: int, clinic_id: int):
     """
     Добавление клиники в избранное для пользователя.
 
@@ -70,10 +73,9 @@ async def add_to_favorites(db: AsyncSession, user_id: int, clinic_id: int):
     Возвращает:
     - None (пока не реализована логика).
     """
-    pass
+    return await add_to_favorites(db, user_id, clinic_id, FavoriteType.CLINIC)
 
-
-async def remove_from_favorites(db: AsyncSession, user_id: int, clinic_id: int):
+async def remove_clinic_from_favorites(db: AsyncSession, user_id: int, clinic_id: int):
     """
     Удаление клиники из избранного пользователя.
 
@@ -85,4 +87,4 @@ async def remove_from_favorites(db: AsyncSession, user_id: int, clinic_id: int):
     Возвращает:
     - None (пока не реализована логика).
     """
-    pass
+    return await remove_from_favorites(db, user_id, clinic_id, FavoriteType.CLINIC)

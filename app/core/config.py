@@ -14,5 +14,7 @@ class Settings:
     API_KEY: str = os.getenv("API_KEY")
     API_SECRET: str = os.getenv("API_SECRET")
     SECURE: bool = os.getenv("SECURE")
+    YA_API_KEY: str = os.getenv("YA_API_KEY")
+    YA_FOLDER_ID: str = os.getenv("YA_FOLDER_ID")
 
 settings = Settings()

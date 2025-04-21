@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String, Text, Float, ForeignKey
 from sqlalchemy.orm import relationship
+
 from app.db.models.service import service_doctor_association
 from app.db.session import Base
 
@@ -26,3 +27,10 @@ class Doctor(Base):
     appointments = relationship('Appointment', back_populates='doctor')
     # Связь с доступными слотами для записи (один ко многим)
     appointment_slots = relationship('AppointmentSlot', back_populates='doctor')
+    favorited_by = relationship(
+        "User",
+        secondary="user_favorites",
+        primaryjoin="and_(Doctor.id == user_favorites.c.item_id, "
+                    "user_favorites.c.item_type == 'doctor')",
+        viewonly=True
+    )

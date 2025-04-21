@@ -65,3 +65,5 @@ async def get_service(db: AsyncSession, service_id: int):
         raise HTTPException(status_code=404, detail="Услуга не найдена")
 
     return service
+
+

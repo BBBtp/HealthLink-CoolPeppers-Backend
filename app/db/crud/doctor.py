@@ -1,7 +1,10 @@
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+
+from app.db.crud.favorites import add_to_favorites, remove_from_favorites
 from app.db.models.doctor import Doctor
+from app.db.models.favorites import FavoriteType
 from app.db.models.service import service_doctor_association, Service
 
 
@@ -52,7 +55,7 @@ async def get_doctor(db: AsyncSession, doctor_id: int):
     return doctor
 
 
-async def add_to_favorites(db: AsyncSession, user_id: int, doctor_id: int):
+async def add_doctor_to_favorites(db: AsyncSession, user_id: int, doctor_id: int):
     """
     Добавление врача в избранное для пользователя.
 
@@ -61,13 +64,11 @@ async def add_to_favorites(db: AsyncSession, user_id: int, doctor_id: int):
     - user_id: int — уникальный идентификатор пользователя.
     - doctor_id: int — уникальный идентификатор врача.
 
-    Возвращает:
-    - None (пока не реализована логика).
     """
-    pass
+    return await add_to_favorites(db, user_id, doctor_id, FavoriteType.DOCTOR)
 
 
-async def remove_from_favorites(db: AsyncSession, user_id: int, doctor_id: int):
+async def remove_doctor_from_favorites(db: AsyncSession, user_id: int, doctor_id: int):
     """
     Удаление врача из избранного пользователя.
 
@@ -76,7 +77,5 @@ async def remove_from_favorites(db: AsyncSession, user_id: int, doctor_id: int):
     - user_id: int — уникальный идентификатор пользователя.
     - doctor_id: int — уникальный идентификатор врача.
 
-    Возвращает:
-    - None (пока не реализована логика).
     """
-    pass
+    return await remove_from_favorites(db, user_id, doctor_id, FavoriteType.DOCTOR)
