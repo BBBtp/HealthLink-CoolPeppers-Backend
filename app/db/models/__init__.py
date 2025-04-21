@@ -9,3 +9,4 @@ from .appointment_slot import AppointmentSlot
 from .chat import Chat
 from .message import Message
 from .symptom import Symptom
+from .favorites import UserFavorite

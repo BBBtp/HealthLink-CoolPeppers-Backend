@@ -1,7 +1,9 @@
-from sqlalchemy import Column, Integer, String, Text, Float
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, String, Text, Float, and_
+from sqlalchemy.orm import relationship, foreign
+
 
 from app.db.models.service import clinic_service_association
+from app.db.models.favorites import UserFavorite
 from app.db.session import Base
 
 
@@ -26,4 +28,11 @@ class Clinic(Base):
     appointments = relationship('Appointment', back_populates='clinic')
     # Связь с врачами (один ко многим)
     doctors = relationship("Doctor", back_populates="clinic")
-    favorites = relationship("UserFavorite", back_populates="clinic")
+    favorites = relationship(
+        "UserFavorite",
+        primaryjoin=and_(
+            foreign(UserFavorite.item_id) == id,
+            UserFavorite.item_type == "clinic"
+        ),
+        viewonly=True
+    )

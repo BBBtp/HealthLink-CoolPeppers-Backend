@@ -25,7 +25,7 @@ class User(Base):
     role = Column(String, default=UserRole.user,nullable=True)
 
     appointments = relationship('Appointment', back_populates='user')
-
+    favorites = relationship("UserFavorite", back_populates="user", cascade="all, delete-orphan")
     def __repr__(self):
         return f"<User(id={self.id}, username={self.username}, email={self.email})>"
 
