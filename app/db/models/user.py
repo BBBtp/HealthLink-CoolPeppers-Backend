@@ -25,23 +25,6 @@ class User(Base):
     role = Column(String, default=UserRole.user,nullable=True)
 
     appointments = relationship('Appointment', back_populates='user')
-    favorite_doctors = relationship(
-        "Doctor",
-        secondary="user_favorites",
-        primaryjoin="and_(User.id == user_favorites.c.user_id, "
-                    "user_favorites.c.item_type == 'doctor')",
-        collection_class=set,
-        viewonly=True
-    )
-
-    favorite_clinics = relationship(
-        "Clinic",
-        secondary="user_favorites",
-        primaryjoin="and_(User.id == user_favorites.c.user_id, "
-                    "user_favorites.c.item_type == 'clinic')",
-        collection_class=set,
-        viewonly=True
-    )
 
     def __repr__(self):
         return f"<User(id={self.id}, username={self.username}, email={self.email})>"

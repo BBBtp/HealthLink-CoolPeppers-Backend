@@ -3,7 +3,7 @@ from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.models import User, Doctor, Clinic
-from app.db.models.favorites import FavoriteType, user_favorites
+from app.db.models.favorites import FavoriteType, UserFavorite
 
 
 async def add_to_favorites(db: AsyncSession, user_id: int, item_id: int, item_type: FavoriteType):
@@ -31,26 +31,26 @@ async def add_to_favorites(db: AsyncSession, user_id: int, item_id: int, item_ty
         )
 
     # Проверяем, не добавлен ли уже элемент
-    stmt = select(user_favorites).where(
-        user_favorites.c.user_id == user_id,
-        user_favorites.c.item_id == item_id,
-        user_favorites.c.item_type == item_type
+    existing_favorite = await db.execute(
+        select(UserFavorite).where(
+            UserFavorite.user_id == user_id,
+            UserFavorite.item_id == item_id,
+            UserFavorite.item_type == item_type
+        )
     )
-    result = await db.execute(stmt)
-    if result.scalar():
+    if existing_favorite.scalar():
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"{item_type.value.capitalize()} already in favorites"
         )
 
     # Добавляем связь
-    await db.execute(
-        insert(user_favorites).values(
-            user_id=user_id,
-            item_id=item_id,
-            item_type=item_type
-        )
+    new_favorite = UserFavorite(
+        user_id=user_id,
+        item_id=item_id,
+        item_type=item_type
     )
+    db.add(new_favorite)
     await db.commit()
     return {"message": f"{item_type.value.capitalize()} added to favorites"}
 
@@ -80,13 +80,14 @@ async def remove_from_favorites(db: AsyncSession, user_id: int, item_id: int, it
         )
 
     # Проверяем, есть ли элемент в избранном
-    stmt = select(user_favorites).where(
-        user_favorites.c.user_id == user_id,
-        user_favorites.c.item_id == item_id,
-        user_favorites.c.item_type == item_type
+    favorite = await db.execute(
+        select(UserFavorite).where(
+            UserFavorite.user_id == user_id,
+            UserFavorite.item_id == item_id,
+            UserFavorite.item_type == item_type
+        )
     )
-    result = await db.execute(stmt)
-    if not result.scalar():
+    if not favorite.scalar():
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"{item_type.value.capitalize()} not in favorites"
@@ -94,10 +95,10 @@ async def remove_from_favorites(db: AsyncSession, user_id: int, item_id: int, it
 
     # Удаляем связь
     await db.execute(
-        delete(user_favorites).where(
-            user_favorites.c.user_id == user_id,
-            user_favorites.c.item_id == item_id,
-            user_favorites.c.item_type == item_type
+        delete(UserFavorite).where(
+            UserFavorite.user_id == user_id,
+            UserFavorite.item_id == item_id,
+            UserFavorite.item_type == item_type
         )
     )
     await db.commit()
