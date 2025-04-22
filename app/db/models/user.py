@@ -22,7 +22,7 @@ class User(Base):
     blood_type = Column(String, nullable=True)
     is_active = Column(Boolean, default=True)
     is_admin = Column(Boolean, default=False)
-    role = Column(String, default=UserRole.user,nullable=True)
+    role = Column(String, default=UserRole.user.value,nullable=True)
 
     appointments = relationship('Appointment', back_populates='user')
     favorites = relationship("UserFavorite", back_populates="user", cascade="all, delete-orphan")
