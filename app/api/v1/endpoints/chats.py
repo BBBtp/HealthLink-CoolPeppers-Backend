@@ -20,7 +20,7 @@ async def read_user_chats(db: AsyncSession = Depends(get_db),current_user: User 
     try:
         if current_user is None:
             raise HTTPException(status_code=404, detail="User not found")
-        chats = await get_user_chats(db, current_user.id)
+        chats = await get_user_chats(db, 6)
         return chats
     except Exception as e:
         raise HTTPException(status_code=422, detail=f"Error: {e}")
