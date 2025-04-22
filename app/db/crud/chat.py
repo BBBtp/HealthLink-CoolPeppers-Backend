@@ -1,5 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from sqlalchemy.orm import selectinload
+
 from app.db.models.user import User
 from app.db.models.chat import Chat
 from fastapi import HTTPException
@@ -13,9 +15,17 @@ async def get_chat(db: AsyncSession, chat_id: int):
 
 # Получение всех чатов пользователя
 async def get_user_chats(db: AsyncSession, user_id: int):
-    result = await db.execute(select(Chat).filter(
-        (Chat.user1_id == user_id) | (Chat.user2_id == user_id)
-    ))
+    result = await db.execute(
+        select(Chat)
+        .options(
+            selectinload(Chat.user1),
+            selectinload(Chat.user2),
+            selectinload(Chat.messages)
+        )
+        .filter(
+            (Chat.user1_id == user_id) | (Chat.user2_id == user_id)
+        )
+    )
     return result.scalars().all()
 
 
