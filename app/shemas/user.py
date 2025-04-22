@@ -26,6 +26,7 @@ class TokenRefresh(BaseModel):
     refresh_token: str
 
 class UserProfile(BaseModel):
+    id: int
     username: str
     email: str
     first_name: Optional[str] = None
