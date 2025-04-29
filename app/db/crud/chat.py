@@ -9,7 +9,17 @@ from fastapi import HTTPException
 
 # Получение чата по ID
 async def get_chat(db: AsyncSession, chat_id: int):
-    result = await db.execute(select(Chat).filter(Chat.id == chat_id))
+    result = await db.execute(
+        select(Chat)
+        .options(
+            selectinload(Chat.user1),
+            selectinload(Chat.user2),
+            selectinload(Chat.messages)
+        )
+        .filter(
+            (Chat.id == chat_id)
+        )
+    )
     return result.scalars().first()
 
 
