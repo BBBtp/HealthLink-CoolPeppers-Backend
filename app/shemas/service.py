@@ -15,5 +15,6 @@ class ServiceCreate(ServiceBase):
 class Service(ServiceBase):
     id: int
     logo_url: Optional[str] = None
+    clinic_id: Optional[int] = None
     class Config:
         from_attributes = True
