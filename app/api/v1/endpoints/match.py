@@ -13,3 +13,9 @@ async def match_services(payload: SymptomInput, db: AsyncSession = Depends(get_d
     services_data = [{"name": s.name, "description": s.description} for s in services]
     result = get_services_by_symptoms(payload.symptoms, services_data)
     return {"services": result}
+
+
+@router.get("/symptoms/", response_model=list[SymptomOut])
+async def read_all_symptoms(db: AsyncSession = Depends(get_db)):
+    symptoms = await get_all_symptoms(db)
+    return symptoms
