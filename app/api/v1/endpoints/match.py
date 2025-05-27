@@ -1,9 +1,11 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.db.crud.symptoms import get_all_symptoms
 from app.db.session import get_db
 from app.db.crud import service as crud_service
 from app.core.gpt import get_services_by_symptoms
-from app.shemas.match import SymptomInput, MatchResult
+from app.shemas.match import SymptomInput, MatchResult, SymptomOut
 
 router = APIRouter()
 
