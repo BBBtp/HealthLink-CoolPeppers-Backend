@@ -19,6 +19,8 @@ class Doctor(Base):
     customer_count = Column(Integer, nullable=True)
     reviews_count = Column(Integer, nullable=True)
     rating = Column(Float, default=0.0)
+    user = relationship("User", back_populates="doctor", uselist=False)
+    chats = relationship("Chat", back_populates="doctor", cascade="all, delete-orphan")
 
     # Связь с клиникой (один ко многим)
     clinic_id = Column(Integer, ForeignKey('clinics.id'))

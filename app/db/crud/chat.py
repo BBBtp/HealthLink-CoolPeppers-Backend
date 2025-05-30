@@ -2,6 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
+from app.db.models import Doctor
 from app.db.models.user import User
 from app.db.models.chat import Chat
 from fastapi import HTTPException
@@ -14,7 +15,8 @@ async def get_chat(db: AsyncSession, chat_id: int):
         .options(
             selectinload(Chat.user1),
             selectinload(Chat.user2),
-            selectinload(Chat.messages)
+            selectinload(Chat.messages),
+            selectinload(Chat.doctor)
         )
         .filter(
             (Chat.id == chat_id)
@@ -30,7 +32,8 @@ async def get_user_chats(db: AsyncSession, user_id: int):
         .options(
             selectinload(Chat.user1),
             selectinload(Chat.user2),
-            selectinload(Chat.messages)
+            selectinload(Chat.messages),
+            selectinload(Chat.doctor)
         )
         .filter(
             (Chat.user1_id == user_id) | (Chat.user2_id == user_id)
@@ -51,9 +54,21 @@ async def create_chat(db: AsyncSession, user1_id: int, user2_id: int):
     if not user1 or not user2:
         raise HTTPException(status_code=404, detail="Один из пользователей не найден")
 
-    # Проверяем, что хотя бы один из пользователей - доктор
-    if user1.role != "doctor" and user2.role != "doctor":
+    # Определяем, кто доктор
+    doctor_user = None
+    if user1.role == "doctor":
+        doctor_user = user1
+    elif user2.role == "doctor":
+        doctor_user = user2
+    else:
         raise HTTPException(status_code=403, detail="Один из пользователей должен быть доктором")
+
+    # Получаем doctor_id из модели Doctor
+    doctor_result = await db.execute(select(Doctor).filter(Doctor.user_id == doctor_user.id))
+    doctor = doctor_result.scalars().first()
+
+    if not doctor:
+        raise HTTPException(status_code=404, detail="Доктор не найден в базе")
 
     # Проверяем, существует ли уже чат
     chat_check_result = await db.execute(select(Chat).filter(
@@ -64,8 +79,12 @@ async def create_chat(db: AsyncSession, user1_id: int, user2_id: int):
     chat = chat_check_result.scalars().first()
 
     if not chat:
-        # Если чат не существует, создаем новый
-        chat = Chat(user1_id=user1_id, user2_id=user2_id)
+        # Создаем новый чат с doctor_id
+        chat = Chat(
+            user1_id=user1_id,
+            user2_id=user2_id,
+            doctor_id=doctor.id
+        )
         db.add(chat)
         await db.commit()
         await db.refresh(chat)
