@@ -64,7 +64,7 @@ async def create_chat(db: AsyncSession, user1_id: int, user2_id: int):
         raise HTTPException(status_code=403, detail="Один из пользователей должен быть доктором")
 
     # Получаем doctor_id из модели Doctor
-    doctor_result = await db.execute(select(Doctor).filter(Doctor.user_id == doctor_user.id))
+    doctor_result = await db.execute(select(Doctor).filter(Doctor.id == doctor_user.doctor_id))
     doctor = doctor_result.scalars().first()
 
     if not doctor:
