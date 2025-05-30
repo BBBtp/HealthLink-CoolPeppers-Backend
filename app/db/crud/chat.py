@@ -82,7 +82,7 @@ async def create_chat(db: AsyncSession, user1_id: int, user2_id: int):
         # Создаем новый чат с doctor_id
         chat = Chat(
             user1_id=user1_id,
-            user2_id=user2_id,
+            user2_id=user2.id,
             doctor_id=doctor.id
         )
         db.add(chat)
