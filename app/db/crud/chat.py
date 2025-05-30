@@ -45,8 +45,8 @@ async def get_user_chats(db: AsyncSession, user_id: int):
 # Создание нового чата
 async def create_chat(db: AsyncSession, user1_id: int, user2_id: int):
     # Получаем пользователей
-    user1_result = await db.execute(select(User).filter(User.doctor_id == user1_id))
-    user2_result = await db.execute(select(User).filter(User.id == user2_id))
+    user1_result = await db.execute(select(User).filter(User.id == user1_id))
+    user2_result = await db.execute(select(User).filter(User.doctor_id == user2_id))
 
     user1 = user1_result.scalars().first()
     user2 = user2_result.scalars().first()
